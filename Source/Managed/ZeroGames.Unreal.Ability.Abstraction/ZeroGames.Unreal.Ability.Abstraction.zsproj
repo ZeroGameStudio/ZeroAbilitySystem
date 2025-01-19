@@ -1,0 +1,16 @@
+{
+	"Folder": "Plugin/ZeroAbilitySystem",
+	"Authors": "Lin7Han",
+	"Company": "ZeroGames",
+	"AssemblyVersion": "1.0.0",
+	"FileVersion": "1.0.0",
+	"NeutralLanguage": "zh",
+	"ProjectReferences":
+	[
+		"ZeroGames.ZSharp.Core",
+		"ZeroGames.ZSharp.Core.UnrealEngine",
+		"ZeroGames.ZSharp.UnrealEngine"
+	]
+}
+
+

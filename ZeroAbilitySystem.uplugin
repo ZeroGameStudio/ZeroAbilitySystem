@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "Zero Ability System",
+	"Description": "Lightweight gameplay ability system implemented by Z#.",
+	"Category": "Gameplay",
+	"CreatedBy": "Zero Games",
+	"CreatedByURL": "https://github.com/ZeroGameStudio/ZeroAbilitySystem",
+	"DocsURL": "https://github.com/ZeroGameStudio/ZeroAbilitySystem",
+	"MarketplaceURL": "https://github.com/ZeroGameStudio/ZeroAbilitySystem",
+	"SupportURL": "https://github.com/ZeroGameStudio/ZeroAbilitySystem",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": true,
+	"Installed": false,
+	"HasZSharpProject": true,
+	"Modules": [
+		{
+			"Name": "ZeroAbilitySystemRuntime",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ZSharp",
+			"Enabled": true
+		}
+	]
+}
+
+
