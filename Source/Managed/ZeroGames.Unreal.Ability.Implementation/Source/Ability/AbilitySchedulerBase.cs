@@ -91,7 +91,7 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 
 		try
 		{
-			activatedContext = InternalActivateAbility(request);
+			activatedContext = InternalActivateAbility(request, default);
 			return true;
 		}
 		catch (Exception ex)
@@ -186,7 +186,7 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 		}
 
 		ActiveAbilityGuid result = new(_currentGuid);
-		_currentGuid = _currentGuid + 2;
+		_currentGuid += 2;
 		return result;
 	}
 
@@ -236,7 +236,7 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 	protected virtual void HandleCancelAbility(IAbilityCancellationRequest request, IAbilityExecutionContext canceledContext){}
 	protected virtual void HandleEndAbility(IAbilityExecutionContext completedContext){}
 	
-	protected IAbilityExecutionContext InternalActivateAbility(IAbilityActivationRequest request)
+	protected IAbilityExecutionContext InternalActivateAbility(IAbilityActivationRequest request, ActiveAbilityGuid guid)
 	{
 		try
 		{
@@ -247,7 +247,7 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 				InternalCancelAbility(cancellationRequest, activeContext);
 			}
 
-			IAbilityExecutionContext activatedContext = IAbilitySystemAllocator.Instance.AllocateExecutionContext(this, request.Definition);
+			IAbilityExecutionContext activatedContext = IAbilitySystemAllocator.Instance.AllocateExecutionContext(this, request.Definition, guid);
 			activatedContext.ExecutionState = EAbilityExecutionState.PendingActivation;
 			_activeAbilityMap[group] = activatedContext;
 			

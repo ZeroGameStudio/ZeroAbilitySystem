@@ -5,9 +5,9 @@ namespace ZeroGames.Unreal.Ability;
 public class AbilityExecutionContext : IAbilityExecutionContext, IAbilityTaskContainer
 {
 
-	public AbilityExecutionContext(IAbilityScheduler scheduler, IAbilityDefinition definition)
+	public AbilityExecutionContext(IAbilityScheduler scheduler, IAbilityDefinition definition, ActiveAbilityGuid guid = default)
 	{
-		Guid = scheduler.GenerateNextActiveAbilityGuid();
+		Guid = guid.IsValid ? guid : scheduler.GenerateNextActiveAbilityGuid();
 		Scheduler = scheduler;
 		Definition = definition;
 	}

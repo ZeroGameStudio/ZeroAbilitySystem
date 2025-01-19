@@ -18,7 +18,7 @@ public class AbilityScheduler_Authority : AbilitySchedulerBase, IAbilitySchedule
 
 		if (activatedContext.Definition.NetPolicy == EAbilityNetPolicy.Replicated)
 		{
-			ReplicationProxy?.ReplicateAbilityActivation(request);
+			ReplicationProxy?.ReplicateAbilityActivation(request, activatedContext.Guid);
 		}
 	}
 

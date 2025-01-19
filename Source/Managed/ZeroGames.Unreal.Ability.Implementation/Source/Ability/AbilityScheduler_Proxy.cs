@@ -10,9 +10,9 @@ public class AbilityScheduler_Proxy : AbilitySchedulerBase, IAbilityScheduler_Pr
 		
 	}
 
-	public void ReceiveAbilityActivation(IAbilityActivationRequest request)
+	public void ReceiveAbilityActivation(IAbilityActivationRequest request, ActiveAbilityGuid guid)
 	{
-		InternalActivateAbility(request);
+		InternalActivateAbility(request, guid);
 	}
 
 	public void ReceiveAbilityCancellation(IAbilityCancellationRequest request)

@@ -27,7 +27,7 @@ public interface IAbilitySystemAllocator
 
 	IAbilityActivationRequest AllocateActivationRequest(IAbilityDefinition definition);
 	IAbilityCancellationRequest AllocateCancellationRequest(AbilityActivationGroup group, ActiveAbilityGuid guid = default);
-	IAbilityExecutionContext AllocateExecutionContext(IAbilityScheduler scheduler, IAbilityDefinition definition);
+	IAbilityExecutionContext AllocateExecutionContext(IAbilityScheduler scheduler, IAbilityDefinition definition, ActiveAbilityGuid guid = default);
 
 	private static IAbilitySystemAllocator? _instance;
 }
