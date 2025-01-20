@@ -5,12 +5,12 @@ namespace ZeroGames.Unreal.Ability;
 public class AbilityScheduler_Authority : AbilitySchedulerBase, IAbilityScheduler_Authority
 {
 	
-	public AbilityScheduler_Authority(Actor avatar, IAbilityReplicationProxy? replicationProxy) : base(avatar)
+	public AbilityScheduler_Authority(Actor avatar, IAbilityNetReplicator? replicator) : base(avatar)
 	{
-		ReplicationProxy = replicationProxy;
+		Replicator = replicator;
 	}
 	
-	public IAbilityReplicationProxy? ReplicationProxy { get; }
+	public IAbilityNetReplicator? Replicator { get; }
 
 	protected override void HandleActivateAbility(IAbilityActivationRequest request, IAbilityExecutionContext activatedContext)
 	{
@@ -18,7 +18,7 @@ public class AbilityScheduler_Authority : AbilitySchedulerBase, IAbilitySchedule
 
 		if (activatedContext.Definition.NetPolicy == EAbilityNetPolicy.Replicated)
 		{
-			ReplicationProxy?.ReplicateAbilityActivation(request, activatedContext.Guid);
+			Replicator?.NetSerializeAbilityActivation(request, activatedContext.Guid);
 		}
 	}
 
@@ -26,7 +26,7 @@ public class AbilityScheduler_Authority : AbilitySchedulerBase, IAbilitySchedule
 	{
 		if (canceledContext.Definition.NetPolicy == EAbilityNetPolicy.Replicated)
 		{
-			ReplicationProxy?.ReplicateAbilityCancellation(request);
+			Replicator?.NetSerializeAbilityCancellation(request);
 		}
 		
 		base.HandleCancelAbility(request, canceledContext);
@@ -36,11 +36,22 @@ public class AbilityScheduler_Authority : AbilitySchedulerBase, IAbilitySchedule
 	{
 		if (completedContext.Definition.NetPolicy == EAbilityNetPolicy.Replicated)
 		{
-			ReplicationProxy?.ReplicateAbilityCompletion(completedContext.Definition.ActivationGroup, completedContext.Guid);
+			Replicator?.NetSerializeAbilityCompletion(completedContext.Definition.ActivationGroup, completedContext.Guid);
 		}
 		
 		base.HandleEndAbility(completedContext);
 	}
+
+	protected override void HandleDispatchAbilityEvent(IAbilityEventDefinition definition, AbilityEventKey key, AbilityActivationGroup group, ActiveAbilityGuid guid, IAbilityEventPayload? payload)
+	{
+		base.HandleDispatchAbilityEvent(definition, key, group, guid, payload);
+
+		if (definition.NetPolicy == EAbilityEventNetPolicy.Replicated)
+		{
+			Replicator?.NetSerializeAbilityEvent(key, group, guid, payload);
+		}
+	}
+	
 }
 
 

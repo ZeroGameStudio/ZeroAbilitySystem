@@ -20,6 +20,8 @@ public interface IAbilityScheduler
 	bool CanActivateAbility(IAbilityActivationRequest request, out IAbilityActivationTestResult? details);
 	
 	void EndAbility(IAbilityExecutionContext context);
+
+	void DispatchAbilityEvent(AbilityEventKey key, AbilityActivationGroup group, ActiveAbilityGuid guid = default, IAbilityEventPayload? payload = null);
 	
 	ActiveAbilityGuid GenerateNextActiveAbilityGuid();
 	
@@ -30,6 +32,12 @@ public interface IAbilityScheduler
 	event Action<IAbilityExecutionContext>? OnAbilityActivated;
 	event Action<IAbilityExecutionContext>? OnAbilityCancelled;
 	event Action<IAbilityExecutionContext>? OnAbilityCompleted;
+}
+
+public static class AbilitySchedulerExtensions
+{
+	public static void DispatchAbilityEvent(this IAbilityScheduler @this, AbilityEventKey key, IAbilityExecutionContext context, IAbilityEventPayload? payload = null)
+		=> @this.DispatchAbilityEvent(key, context.Definition.ActivationGroup, context.Guid, payload);
 }
 
 

@@ -2,9 +2,6 @@
 
 namespace ZeroGames.Unreal.Ability;
 
-public interface IAbilityScheduler_Proxy : IAbilityScheduler, IAbilityNetReceiver
-{
-
-}
+public readonly record struct AbilityEventKey(string Id);
 
 

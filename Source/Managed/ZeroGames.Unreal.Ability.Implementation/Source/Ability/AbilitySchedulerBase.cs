@@ -133,6 +133,7 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 			}
 		}
 
+		
 		InternalCancelAbility(request, canceledContext);
 		return true;
 	}
@@ -176,6 +177,11 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 			UnhandledExceptionHelper.Guard(ex);
 			return false;
 		}
+	}
+
+	public void DispatchAbilityEvent(AbilityEventKey key, AbilityActivationGroup group, ActiveAbilityGuid guid = default, IAbilityEventPayload? payload = null)
+	{
+		InternalDispatchAbilityEvent(key, group, guid, payload, true);
 	}
 
 	ActiveAbilityGuid IAbilityScheduler.GenerateNextActiveAbilityGuid()
@@ -235,6 +241,8 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 	protected virtual void HandleActivateAbility(IAbilityActivationRequest request, IAbilityExecutionContext activatedContext){}
 	protected virtual void HandleCancelAbility(IAbilityCancellationRequest request, IAbilityExecutionContext canceledContext){}
 	protected virtual void HandleEndAbility(IAbilityExecutionContext completedContext){}
+
+	protected virtual void HandleDispatchAbilityEvent(IAbilityEventDefinition definition, AbilityEventKey key, AbilityActivationGroup group, ActiveAbilityGuid guid, IAbilityEventPayload? payload){}
 	
 	protected IAbilityExecutionContext InternalActivateAbility(IAbilityActivationRequest request, ActiveAbilityGuid guid)
 	{
@@ -304,6 +312,44 @@ public abstract class AbilitySchedulerBase : IAbilityScheduler
 		finally
 		{
 			ensure(_activeAbilityMap.Remove(completedContext.Definition.ActivationGroup));
+		}
+	}
+	
+	protected void InternalDispatchAbilityEvent(AbilityEventKey key, AbilityActivationGroup group, ActiveAbilityGuid guid, IAbilityEventPayload? payload, bool checkNetPolicy)
+	{
+		if (!_activeAbilityMap.TryGetValue(group, out var activeContext))
+		{
+			return;
+		}
+
+		if (guid.IsValid && activeContext.Guid != guid)
+		{
+			return;
+		}
+
+		try
+		{
+			if (!activeContext.Definition.TryGetAbilityEventDefinition(key, out var definition))
+			{
+				return;
+			}
+
+			if (checkNetPolicy)
+			{
+				EAbilityEventNetPolicy netPolicy = definition.NetPolicy;
+				ENetMode netMode = Avatar.GetNetMode();
+				if (netPolicy != EAbilityEventNetPolicy.LocalOnly && netMode == ENetMode.NM_Client)
+				{
+					return;
+				}
+			}
+			
+			HandleDispatchAbilityEvent(definition, key, group, guid, payload);
+			definition.Executor.ReceiveAbilityEvent(activeContext, definition, payload);
+		}
+		catch (Exception ex)
+		{
+			UnhandledExceptionHelper.Guard(ex);
 		}
 	}
 

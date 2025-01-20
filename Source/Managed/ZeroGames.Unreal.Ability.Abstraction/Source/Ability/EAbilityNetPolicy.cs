@@ -5,7 +5,7 @@ namespace ZeroGames.Unreal.Ability;
 public enum EAbilityNetPolicy
 {
 	/// <summary>
-	/// Ability must be activated by authority and will be replicated to proxies if online.
+	/// Ability must be activated by authority and will be replicated to proxies.
 	/// </summary>
 	Replicated,
 	

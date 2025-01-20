@@ -12,10 +12,7 @@ public abstract class AbilityExecutorBase : IAbilityExecutor
 	protected virtual void HandleCancel(IAbilityExecutionContext canceledContext, IAbilityCancellationRequest request){}
 	void IAbilityExecutor.HandleCancel(IAbilityExecutionContext canceledContext, IAbilityCancellationRequest request)
 	{
-		if (canceledContext is IAbilityTaskContainer container)
-		{
-			container.Clear();
-		}
+		canceledContext.Clear();
 		
 		HandleCancel(canceledContext, request);
 	}
@@ -23,10 +20,7 @@ public abstract class AbilityExecutorBase : IAbilityExecutor
 	protected virtual void HandleEnd(IAbilityExecutionContext completedContext){}
 	void IAbilityExecutor.HandleEnd(IAbilityExecutionContext completedContext)
 	{
-		if (completedContext is IAbilityTaskContainer container)
-		{
-			container.Clear();
-		}
+		completedContext.Clear();
 		
 		HandleEnd(completedContext);
 	}
@@ -34,10 +28,7 @@ public abstract class AbilityExecutorBase : IAbilityExecutor
 	protected virtual void Tick(IAbilityExecutionContext context, float deltaSeconds){}
 	void IAbilityExecutor.Tick(IAbilityExecutionContext context, float deltaSeconds)
 	{
-		if (context is IAbilityTaskContainer container)
-		{
-			container.Tick(deltaSeconds);
-		}
+		context.Tick(deltaSeconds);
 		
 		Tick(context, deltaSeconds);
 	}
@@ -75,7 +66,7 @@ public abstract class AbilityExecutorBase : IAbilityExecutor
 
 		return false;
 	}
-
+	
 }
 
 

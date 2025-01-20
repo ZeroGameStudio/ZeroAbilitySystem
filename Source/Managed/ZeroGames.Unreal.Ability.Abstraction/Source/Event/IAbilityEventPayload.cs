@@ -2,7 +2,7 @@
 
 namespace ZeroGames.Unreal.Ability;
 
-public interface IAbilityScheduler_Proxy : IAbilityScheduler, IAbilityNetReceiver
+public interface IAbilityEventPayload
 {
 
 }
